@@ -35,6 +35,19 @@
     title=pages[currentPageIndex];
     note=localStorage.getItem(title);
   }
+  function deletePage(index) {
+    const pageToDelete = pages[index];
+    pages.splice(index, 1); 
+    localStorage.removeItem(pageToDelete); 
+    localStorage.setItem("pages", JSON.stringify(pages)); 
+
+    
+    if (pages.length === 0) {
+      addPage(); 
+    } else if (index === currentPageIndex) {
+      selectPage(pages.length - 1); 
+    }
+  }
  
 </script>
 <aside class="fixed top-0 left-0 z-40 w-60 h-screen">
@@ -43,7 +56,9 @@
       {#each pages as page,index}
       <li>
         <button on:click={()=>selectPage(index)} class="{index==currentPageIndex ? 'bg-dark-gray':''} py-2 px-3 text-gray-900 rounded-lg">{page}</button>
-      </li>
+        <button on:click={() => deletePage(index)} class="ml-2 text-red-600 hover:text-red-800">Delete</button>
+        </li>
+      
       {/each}
       <li class="text-center"><button on:click={addPage} class="font-medium">+Add page</button></li>
     </ul>
